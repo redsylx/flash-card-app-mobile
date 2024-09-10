@@ -2,10 +2,12 @@
 import { Text, View, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { useCustomTheme } from "@/hooks/useCustomTheme";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { getIdToken } from "@/firebase";
 
 export default function HomePage() {
   const theme = useCustomTheme();
-
+  const [ token, setToken ] = useState("");
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -58,8 +60,9 @@ export default function HomePage() {
       <Text style={styles.description}>
         an object that you keep to remember a person, place, or event
       </Text>
+      <Text>Token: {token}</Text>
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText} onPress={() => router.push('/sign-in')}>Login</Text>
+        <Text style={styles.buttonText} onPress={() => router.push('/login')}>Login</Text>
       </TouchableOpacity>
     </View>
   );

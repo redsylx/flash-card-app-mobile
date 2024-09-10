@@ -1,10 +1,33 @@
+import { auth } from '@/firebase';
 import { useCustomTheme } from '@/hooks/useCustomTheme';
-import React from 'react';
+import { useLoading } from '@/store';
+import { router, useNavigation } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+interface ILoginForm {
+  email: string,
+  password: string,
+  repassword?: string
+}
+
 export default function SignIn() {
   const theme = useCustomTheme();
+  const loading = useLoading();
+  const [ loginForm, setLoginForm ] = useState<ILoginForm>({email:"", password:""});
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, loginForm.email, loginForm.password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      router.push('/auth');
+    })
+    .catch((error) => {
+      console.error('Login failed', error.message);
+    });
+  };
   
   const styles = StyleSheet.create({
     container: {
@@ -66,21 +89,25 @@ export default function SignIn() {
         placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
+        value={loginForm.email}
         placeholderTextColor={theme.sub}
+        onChangeText={(text) => setLoginForm({...loginForm, email: text})}
       />
       
       <TextInput
         style={styles.input}
         placeholder="Password"
         secureTextEntry
+        value={loginForm.password}
         placeholderTextColor={theme.sub}
+        onChangeText={(text) => setLoginForm({...loginForm, password: text})}
       />
       
       <TouchableOpacity>
         <Text style={styles.forgotPassword}>Lupa Password</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginText}>Log in</Text>
       </TouchableOpacity>
       
