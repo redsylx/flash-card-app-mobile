@@ -5,9 +5,12 @@ import { useEffect } from "react";
 import { getIdToken } from "@/firebase";
 import { serviceAuthGet } from "@/services/ServiceAuth";
 import IAccount from "@/interfaces/IAccount";
+import { useAccount } from "@/store";
+import { router } from "expo-router";
 
 export default function HomePage() {
   const theme = useCustomTheme();
+  const account = useAccount();
 
   const styles = StyleSheet.create({
     container: {
@@ -27,7 +30,9 @@ export default function HomePage() {
   useEffect(() => {
     const fetchToken = async () => {
       const token = await getIdToken();
-      const account = (await (await serviceAuthGet(token)).json()) as IAccount;
+      const res = (await (await serviceAuthGet(token)).json()) as IAccount;
+      account.setAccount(res);
+      router.push('/(home)')
     }
     fetchToken();
   })

@@ -3,11 +3,32 @@ import { Text, View, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { useCustomTheme } from "@/hooks/useCustomTheme";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { getIdToken } from "@/firebase";
+import { auth, getIdToken } from "@/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { useFetchUser } from "@/hooks/useFetchUser";
+import { useAccount } from "@/store";
 
 export default function HomePage() {
   const theme = useCustomTheme();
+  const account = useAccount();
+  const [isAuthReady, setIsAuthReady] = useState(false);
+  const userFinish = useFetchUser(isAuthReady);
   const [ token, setToken ] = useState("");
+
+  useEffect(() => {
+    if(userFinish && account.account.id) {
+      router.push("/(home)");
+    }
+  }, [userFinish])
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, () => {
+      setIsAuthReady(true);
+    });
+    
+    return () => unsubscribe();
+  }, []);
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,

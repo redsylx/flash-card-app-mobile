@@ -1,6 +1,7 @@
 // ./services/firebase.js
-import { initializeApp } from "firebase/app";
-import { getAuth } from 'firebase/auth';
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { initializeAuth, getReactNativePersistence, getAuth, Auth } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -12,10 +13,23 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-const app = initializeApp(firebaseConfig);
+let app;
+let auth : Auth;
 
-export const auth = getAuth(app);
+if (!getApps().length) {
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+    });
+  } catch (error) {
+    console.log("Error initializing app: " + error);
+  }
+} else {
+  app = getApp();
+  auth = getAuth(app);
+}
 
-export const getIdToken = async () => auth.currentUser?.getIdToken() ?? "";
+const getIdToken = async () => auth.currentUser?.getIdToken() ?? "";
 
-export default app;
+export { app, auth, getIdToken }

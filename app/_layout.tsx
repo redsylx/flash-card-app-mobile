@@ -3,7 +3,6 @@ import { useFonts } from 'expo-font';
 import { useEffect, useState } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import LoadingOverlay from "./components/Loading";
-import { useFetchUser } from "@/hooks/useFetchUser";
 import { useLoading } from "@/store";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase";
