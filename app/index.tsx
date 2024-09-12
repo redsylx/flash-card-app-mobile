@@ -1,5 +1,5 @@
 // app/index.tsx
-import { Text, View, Button, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, Button, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import { useCustomTheme } from "@/hooks/useCustomTheme";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -70,7 +70,6 @@ export default function HomePage() {
       fontFamily: 'font-bold',
       color: theme.text,
       fontSize: 16,
-      textAlign: 'center',
     },
   });
 
@@ -81,7 +80,6 @@ export default function HomePage() {
       <Text style={styles.description}>
         an object that you keep to remember a person, place, or event
       </Text>
-      <Text>Token: {token}</Text>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText} onPress={() => router.push('/login')}>Login</Text>
       </TouchableOpacity>

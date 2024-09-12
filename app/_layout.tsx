@@ -45,7 +45,9 @@ export default function RootLayout() {
   return (
     <>
     <LoadingOverlay/>
-    <Stack screenOptions={{ headerShown: false, animation: "none" }}/>
+    <Stack screenOptions={{ headerShown: false, animation: "none" }}>
+      <Stack.Screen name="index"/>
+    </Stack>
     </>
   );
 }
