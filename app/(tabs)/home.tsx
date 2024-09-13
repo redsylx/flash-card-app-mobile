@@ -3,11 +3,11 @@ import { Text, View, StyleSheet, FlatList, Image, Animated, TouchableOpacity, Pr
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCustomTheme } from "@/hooks/useCustomTheme";
 import { useAccount, useHomeCard, useHomeDropdown } from "@/store";
-import Dropdown from "../components/Dropdown";
 import { getIdToken } from "@/firebase";
 import ICardCategory, { defaultCardCategory } from "@/interfaces/ICardCategory";
 import { serviceCardCategoryGetList } from "@/services/ServiceCardCategory";
 import { serviceCardGetList } from "@/services/ServiceCard";
+import Dropdown from "../components/Dropdown";
 import Card from "../components/Card";
 
 const CardItem = ({ title, imageUri, description }: { title: string; imageUri?: string; description: string }) => {
@@ -124,9 +124,9 @@ export default () => {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       backgroundColor: theme.bg,
-      padding: 20,
+      paddingHorizontal: 20,
+      paddingTop: 10,
     },
     header: {
       flexDirection: "row",
@@ -162,7 +162,7 @@ export default () => {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Dropdown dropdown={dropdown}/>
       <FlatList
         data={card.cards}
@@ -173,6 +173,6 @@ export default () => {
           </View>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 };

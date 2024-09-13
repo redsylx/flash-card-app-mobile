@@ -12,17 +12,28 @@ export default () => {
   const theme = useCustomTheme();
 
   useEffect(() => {
-    if(!account.id) router.push('/');
+    if (!account.id) router.push('/');
   }, [account.id])
 
   const styles = StyleSheet.create({
     container: {
-      justifyContent: 'center',
-
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: theme.bg,
-      paddingHorizontal: 50, 
+      paddingHorizontal: 20,
+      paddingTop: 20,
       color: theme.text
+    },
+    name: {
+      fontFamily: 'font-bold',
+      fontSize: 20,
+      color: theme.main
+    },
+    point: {
+      fontFamily: 'font-regular',
+      fontSize: 16,
+      color: theme.text,
     },
   });
 
@@ -33,11 +44,10 @@ export default () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{account.point} points</Text>
-      <Text>{account.username ? account.username : '. . .'}</Text>
-      <Pressable onPress={logout}>
-        <Text>Logout</Text>
-      </Pressable>
+      <Text style={styles.name}>{account.username ? account.username : '. . .'}</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={styles.point}>{account.point} pts</Text>
+      </View>
     </SafeAreaView >
   )
 }

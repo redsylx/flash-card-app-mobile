@@ -46,6 +46,7 @@ export default function RootLayout() {
     <>
     <LoadingOverlay/>
     <Stack screenOptions={{ headerShown: false, animation: "none" }}>
+      <Stack.Screen name="(tabs)"/>
       <Stack.Screen name="index"/>
     </Stack>
     </>

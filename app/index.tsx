@@ -17,7 +17,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if(userFinish && account.account.id) {
-      router.push("/(home)");
+      router.push("/(tabs)/home");
     }
   }, [userFinish])
 

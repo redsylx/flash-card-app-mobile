@@ -32,7 +32,7 @@ export default function HomePage() {
       const token = await getIdToken();
       const res = (await (await serviceAuthGet(token)).json()) as IAccount;
       account.setAccount(res);
-      router.push('/(home)')
+      router.push('/(tabs)/home')
     }
     fetchToken();
   })
