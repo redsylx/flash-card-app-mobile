@@ -2,6 +2,8 @@ import { create } from "zustand";
 import IAccount, { defaultAccount } from "./interfaces/IAccount";
 import ICardCategory, { defaultCardCategory } from "./interfaces/ICardCategory";
 import ICard, { defaultCard } from "./interfaces/ICard";
+import { defaultSellCardCategory, ISellCardCategory } from "./interfaces/ISellCardCategory";
+import { defaultSellCard, ISellCard } from "./interfaces/ISellCard";
 
 type AccountState = {
   account: IAccount;
@@ -66,33 +68,68 @@ const createDropdownStore = () => create<IDropdownState>((set) => ({
 // Use the factory function to create two separate stores
 const useHomeDropdown = createDropdownStore();
 
-interface ICardState {
-  selectedCard: ICard;
-  cards: ICard[];
-  openedCard: ICard;
-  prevOpenedCard: ICard;
+interface ICardState<T> {
+  item: T;
+  items: T[];
+  openedItem: T;
+  prevOpenedItem: T;
   refresh: boolean;
-  setSelectedCard: (card: ICard) => void;
-  setCards: (cards: ICard[]) => void;
-  setOpenedCard: (card: ICard) => void;
-  setRefresh: (refresh: boolean) => void;
+  setItem: (item: T) => void;
+  setItems: (item: T[]) => void;
+  setOpenedItem: (item: T) => void;
+  setRefresh: (item: boolean) => void;
 }
 
-const useHomeCard = create<ICardState>((set) => ({
-  selectedCard: defaultCard,
-  cards: [],
-  openedCard: defaultCard,
-  prevOpenedCard: defaultCard,
+const createStoreCardStateCard = () => create<ICardState<ICard>>((set) => ({
+  item: defaultCard,
+  items: [],
+  openedItem: defaultCard,
+  prevOpenedItem: defaultCard,
   refresh: false,
-
-  setSelectedCard: (card: ICard) => set({ selectedCard: card }),
-  setCards: (cards: ICard[]) => set({ cards: cards }),
-  setOpenedCard: (card: ICard) => set((state) => ({
-    prevOpenedCard: state.openedCard,
-    openedCard: card
+  setItem: (item) => set({ item }),
+  setItems: (items) => set({ items }),
+  setOpenedItem: (openedItem) => set((state) => ({
+    prevOpenedCard: state.openedItem,
+    openedItem
   })),
   setRefresh: (refresh: boolean) => set({ refresh: refresh }),
 }));
+
+const useHomeCard = createStoreCardStateCard();
+
+const createStoreCardStateSellCardCategory = () => create<ICardState<ISellCardCategory>>((set) => ({
+  item: defaultSellCardCategory,
+  items: [],
+  openedItem: defaultSellCardCategory,
+  prevOpenedItem: defaultSellCardCategory,
+  refresh: false,
+  setItem: (item) => set({ item }),
+  setItems: (items) => set({ items }),
+  setOpenedItem: (openedItem) => set((state) => ({
+    prevOpenedCard: state.openedItem,
+    openedItem
+  })),
+  setRefresh: (refresh: boolean) => set({ refresh: refresh }),
+}));
+
+const useStoreCard = createStoreCardStateSellCardCategory();
+
+const createStoreCardStateSellCard = () => create<ICardState<ISellCard>>((set) => ({
+  item: defaultSellCard,
+  items: [],
+  openedItem: defaultSellCard,
+  prevOpenedItem: defaultSellCard,
+  refresh: false,
+  setItem: (item) => set({ item }),
+  setItems: (items) => set({ items }),
+  setOpenedItem: (openedItem) => set((state) => ({
+    prevOpenedCard: state.openedItem,
+    openedItem
+  })),
+  setRefresh: (refresh: boolean) => set({ refresh: refresh }),
+}));
+
+const useStoreDetailCard = createStoreCardStateSellCard();
 
 export type { IDropdownState };
 
@@ -100,5 +137,7 @@ export {
   useAccount,
   useLoading,
   useHomeDropdown,
-  useHomeCard
+  useHomeCard,
+  useStoreCard,
+  useStoreDetailCard
 }

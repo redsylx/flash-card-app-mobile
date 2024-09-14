@@ -16,7 +16,14 @@ async function serviceSellCardCategoryGetList (accessToken: string, accountId: s
     return await fetch(url, init);
 }
 
+async function serviceSellCardCategoryGetListExclude (accessToken: string, accountId: string, ...filters: string[]) {
+    let url = `${base_url}/list/account/exclude?accountId=${encodeURIComponent(accountId)}&${filters.join('&')}`;
+    const init = requestInit(accessToken);
+    return await fetch(url, init);
+}
+
 export {
     serviceSellCardCategoryCreate,
-    serviceSellCardCategoryGetList
+    serviceSellCardCategoryGetList,
+    serviceSellCardCategoryGetListExclude
 }

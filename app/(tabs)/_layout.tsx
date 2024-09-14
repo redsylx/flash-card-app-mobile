@@ -13,17 +13,17 @@ export default function TabLayout() {
       <Tabs screenOptions={{tabBarInactiveTintColor: theme.sub, tabBarActiveTintColor: theme.main, tabBarActiveBackgroundColor: theme.subAlt, tabBarInactiveBackgroundColor: theme.bg
       }}>
         <Tabs.Screen
-          name="home"
-          options={{
-            headerShown: false,
-            tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
-          }}
-        />
-        <Tabs.Screen
           name="store"
           options={{
             headerShown: false,
             tabBarIcon: ({ color }) => <FontAwesome size={28} name="shopping-cart" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="home"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
           }}
         />
       </Tabs>

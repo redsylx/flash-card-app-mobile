@@ -115,7 +115,7 @@ export default () => {
       if (!categoryId) return;
       const token = await getIdToken();
       const cards = (await (await serviceCardGetList(token, categoryId, "SortOrder=desc")).json()).items;
-      card.setCards(cards);
+      card.setItems(cards);
     };
 
     if(firstRender2 && dropdown.cardCategories.length != 0) setFirstRender2(false)
@@ -165,7 +165,7 @@ export default () => {
     <View style={styles.container}>
       <Dropdown dropdown={dropdown}/>
       <FlatList
-        data={card.cards}
+        data={card.items}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={{marginBottom: 20}}>

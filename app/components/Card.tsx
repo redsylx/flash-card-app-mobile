@@ -14,14 +14,14 @@ const Card: React.FC<ICardProps> = ({ card }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setOpen(cardState.openedCard.id === card.id);
-  }, [cardState.openedCard]);
+    setOpen(cardState.openedItem.id === card.id);
+  }, [cardState.openedItem]);
 
   const onClick = () => {
-    if (card.id === cardState.openedCard.id) {
+    if (card.id === cardState.openedItem.id) {
       setOpen(!open);
     } else {
-      cardState.setOpenedCard(card);
+      cardState.setOpenedItem(card);
     }
   };
 
