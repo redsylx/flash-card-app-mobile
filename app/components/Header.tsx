@@ -47,6 +47,7 @@ export default () => {
       <Text style={styles.name}>{account.username ? account.username : '. . .'}</Text>
       <View style={{ flexDirection: 'row' }}>
         <Text style={styles.point}>{account.point} pts</Text>
+        <Text onPress={() => logout()}>Logout</Text>
       </View>
     </SafeAreaView >
   )

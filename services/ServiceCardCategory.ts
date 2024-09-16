@@ -1,4 +1,4 @@
-import { requestInit, serviceDomain } from "./ServiceBase";
+import { customFetch, requestInit, serviceDomain } from "./ServiceBase";
 
 const base_url = `${serviceDomain}cardCategory`
 
@@ -26,9 +26,16 @@ async function serviceCardCategoryDelete (accessToken: string, accountId: string
     return await fetch(url, init);
 }
 
+async function serviceCardCategoryConvert (accessToken: string, accountId: string, sellCardCategoryId: string) {
+    const url = `${base_url}/convert?accountId=${encodeURIComponent(accountId)}&sellCardCategoryId=${encodeURIComponent(sellCardCategoryId)}`;
+    const init = requestInit(accessToken);
+    return await customFetch(url, init);
+}
+
 export {
     serviceCardCategoryGetList,
     serviceCardCategoryCreate,
     serviceCardCategoryUpdate,
-    serviceCardCategoryDelete
+    serviceCardCategoryDelete,
+    serviceCardCategoryConvert
 }

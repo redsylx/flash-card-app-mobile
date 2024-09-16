@@ -4,6 +4,15 @@ import ICardCategory, { defaultCardCategory } from "./interfaces/ICardCategory";
 import ICard, { defaultCard } from "./interfaces/ICard";
 import { defaultSellCardCategory, ISellCardCategory } from "./interfaces/ISellCardCategory";
 import { defaultSellCard, ISellCard } from "./interfaces/ISellCard";
+import { defaultCart, ICart } from "./interfaces/ICart";
+import { defaultTransactionActivity, ITransactionActivity } from "./interfaces/ITransactionActivity";
+
+interface IDefaultState<T> {
+  item: T,
+  items: T[],
+  setItem: (data: T) => void,
+  setItems: (data: T[]) => void,
+}
 
 type AccountState = {
   account: IAccount;
@@ -131,7 +140,63 @@ const createStoreCardStateSellCard = () => create<ICardState<ISellCard>>((set) =
 
 const useStoreDetailCard = createStoreCardStateSellCard();
 
-export type { IDropdownState };
+const useStoreCart = create<IDefaultState<ICart>>((set) => ({
+  item: defaultCart,
+  items: [],
+  setItem: (item) => set({ item }),
+  setItems: (items) => set({ items }),
+}));
+
+const createSellCardCategory = () => create<IDefaultState<ISellCardCategory>>((set) => ({
+  item: defaultSellCardCategory,
+  items: [],
+  setItem: (item) => set({ item }),
+  setItems: (items) => set({ items }),
+}));
+
+const useStoreCartDetail = createSellCardCategory();
+const useStoreHistoryDetail = createSellCardCategory();
+const useStoreTransaction = create<IDefaultState<ITransactionActivity>>((set) => ({
+  item: defaultTransactionActivity,
+  items: [],
+  setItem: (item) => set({ item }),
+  setItems: (items) => set({ items }),
+}))
+
+interface IPopupState {
+  isOpen: boolean,
+  setIsOpen: (data:boolean) => void,
+}
+
+const createPopup = () => create<IPopupState>((set) => ({
+  isOpen: false,
+  setIsOpen: (isOpen) => set({ isOpen }),
+}))
+
+const useGlobalPopup = createPopup();
+const useStorePopup = createPopup();
+
+interface IAlertState extends IPopupState {
+  title: string,
+  message: string,
+  onClick: () => void;
+  setTitle: (data: string) => void,
+  setMessage: (data: string) => void,
+  setOnClick: (callback: () => void) => void,
+}
+
+const useAlert = create<IAlertState>((set) => ({
+  isOpen: false,
+  setIsOpen: (isOpen) => set({ isOpen }),
+  onClick: () => {set({isOpen: false})},
+  title: "",
+  message: "",
+  setTitle: (title) => set({title}),
+  setMessage: (message) => set({message}),
+  setOnClick: (callback) => set({ onClick: callback }),
+}))
+
+export type { IDropdownState, IPopupState, IAlertState };
 
 export {
   useAccount,
@@ -139,5 +204,12 @@ export {
   useHomeDropdown,
   useHomeCard,
   useStoreCard,
-  useStoreDetailCard
+  useStoreDetailCard,
+  useStoreCart,
+  useStoreCartDetail,
+  useStoreTransaction,
+  useStoreHistoryDetail,
+  useGlobalPopup,
+  useStorePopup,
+  useAlert
 }

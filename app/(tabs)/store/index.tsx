@@ -1,34 +1,63 @@
 import { getIdToken } from "@/firebase";
 import { useCustomTheme } from "@/hooks/useCustomTheme";
+import { ICart } from "@/interfaces/ICart";
 import { IPaginationResult } from "@/interfaces/IPaginationResult";
 import { ISellCardCategory } from "@/interfaces/ISellCardCategory";
+import { serviceCartGet } from "@/services/ServiceCart";
+import { serviceCartDetailAdd, serviceCartDetailGet, serviceCartDetailRemove } from "@/services/ServiceCartDetail";
 import { serviceSellCardCategoryGetListExclude } from "@/services/ServiceSellCardCategory";
-import { useAccount, useStoreCard } from "@/store";
+import { useAccount, useAlert, useStoreCard, useStoreCart, useStoreCartDetail } from "@/store";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default () => {
+  const cartDetail = useStoreCartDetail();
+  const cart = useStoreCart();
   const theme = useCustomTheme();
   const { account } = useAccount();
   const sellCardCategory = useStoreCard();
+  const alert = useAlert();
+
   const getSellCardCategoryExclude = async () => {
     const token = await getIdToken();
     const items: IPaginationResult<ISellCardCategory> = await (await serviceSellCardCategoryGetListExclude(token, account.id)).json();
     sellCardCategory.setItems(items.items);
-    console.log(items);
   }
+
+  const getCartDetails = async () => {
+    const token = await getIdToken();
+    const items: ISellCardCategory[] = await (await serviceCartDetailGet(token, cart.item.id)).json();
+    cartDetail.setItems(items);
+  }
+
+  const addCartDetail = async (sellCategoryId: string) => {
+    const token = await getIdToken();
+    await serviceCartDetailAdd(token, cart.item.id, sellCategoryId);
+    await getCart();
+  }
+
+  const removeCartDetail = async (sellCategoryId: string) => {
+    const token = await getIdToken();
+    await serviceCartDetailRemove(token, cart.item.id, sellCategoryId);
+    await getCart();
+  }
+
+  const getCart = async () => {
+    const token = await getIdToken();
+    const item: ICart = await (await serviceCartGet(token, account.id)).json();
+    cart.setItem(item);
+    await getCartDetails()
+  }
+
   useEffect(() => {
     getSellCardCategoryExclude();
+    getCart();
   }, [])
 
   const viewDetail = (item: ISellCardCategory) => {
     sellCardCategory.setItem(item);
     router.push('/(tabs)/store/detail');
-  }
-
-  const addToCart = (id: string) => {
-    console.log(id);
   }
 
   const styles = StyleSheet.create({
@@ -41,6 +70,7 @@ export default () => {
       color: theme.text,
     }
   })
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -52,12 +82,26 @@ export default () => {
             <Pressable onPress={() => viewDetail(item)}>
               <Text style={styles.text}>View</Text>
             </Pressable>
-            <Pressable onPress={() => addToCart(item.id)}>
-              <Text style={styles.text}>Add to Cart</Text>
-            </Pressable>
+
+            {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == item.id)
+              ?
+              <Pressable onPress={() => removeCartDetail(item.id)}>
+                <Text style={styles.text}>Remove from Cart</Text>
+              </Pressable>
+              :
+              <Pressable onPress={() => addCartDetail(item.id)}>
+                <Text style={styles.text}>Add to Cart</Text>
+              </Pressable>
+            }
           </View>
         )}
       />
+      <Pressable onPress={() => router.push("/(tabs)/store/checkout")}>
+        <Text style={styles.text}>Cart ({cart.item.nItems})</Text>
+      </Pressable>
+      <Pressable onPress={() => router.push("/(tabs)/store/history")}>
+        <Text style={styles.text}>History</Text>
+      </Pressable>
     </View>
   )
 }

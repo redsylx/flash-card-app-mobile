@@ -22,8 +22,15 @@ async function serviceSellCardCategoryGetListExclude (accessToken: string, accou
     return await fetch(url, init);
 }
 
+async function serviceSellCardCategoryGetBuyerList (accessToken: string, transactionId: string, ...filters: string[]) {
+    let url = `${base_url}/list/buyer?transactionId=${encodeURIComponent(transactionId)}&${filters.join('&')}`;
+    const init = requestInit(accessToken);
+    return await fetch(url, init);
+}
+
 export {
     serviceSellCardCategoryCreate,
     serviceSellCardCategoryGetList,
-    serviceSellCardCategoryGetListExclude
+    serviceSellCardCategoryGetListExclude,
+    serviceSellCardCategoryGetBuyerList
 }

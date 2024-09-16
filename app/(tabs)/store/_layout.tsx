@@ -44,6 +44,8 @@ export default () => {
     <View style={styles.container}>
       <Stack screenOptions={{ headerShown: false, animation: "none" }}>
         <Stack.Screen name="index"/>
+        <Stack.Screen name="detail"/>
+        <Stack.Screen name="checkout"/>
       </Stack>
     </View>
   )

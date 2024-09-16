@@ -3,13 +3,15 @@ import { useFonts } from 'expo-font';
 import { useEffect, useState } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import LoadingOverlay from "./components/Loading";
-import { useLoading } from "@/store";
+import { useAlert, useLoading } from "@/store";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase";
+import Alert from "./components/Alert";
 
 export default function RootLayout() {
   const [isAuthReady, setIsAuthReady] = useState(false);
   const { setLoading } = useLoading();
+  const alert = useAlert();
 
   const [fontsLoaded] = useFonts({
     'font-regular': require('../assets/fonts/Poppins-Regular.ttf'),
@@ -45,6 +47,7 @@ export default function RootLayout() {
   return (
     <>
     <LoadingOverlay/>
+    <Alert alert={alert}/>
     <Stack screenOptions={{ headerShown: false, animation: "none" }}>
       <Stack.Screen name="(tabs)"/>
       <Stack.Screen name="index"/>
