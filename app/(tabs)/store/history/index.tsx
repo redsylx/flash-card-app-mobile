@@ -48,6 +48,7 @@ export default () => {
   return (
     <View style={styles.container}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={transaction.items}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (

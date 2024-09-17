@@ -30,6 +30,7 @@ const List = ({ dropdown }: { dropdown: IDropdownState }) => {
 
   return (
     <FlatList
+      showsVerticalScrollIndicator={false}
       data={dropdown.cardCategoriesToShow}
       keyExtractor={(item) => item.name}
       renderItem={({ item }) => (

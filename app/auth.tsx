@@ -35,7 +35,7 @@ export default function HomePage() {
       router.push('/(tabs)/home')
     }
     fetchToken();
-  })
+  }, [])
 
   return (
     <View style={styles.container}>

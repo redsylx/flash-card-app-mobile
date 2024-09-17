@@ -68,6 +68,7 @@ export default () => {
       <Text style={styles.header}>Item : {transaction.item.totalItem}</Text>
       <Text style={styles.header}>Point : {transaction.item.totalPoint}</Text>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={sellCardCategory.items}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (

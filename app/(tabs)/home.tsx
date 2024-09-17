@@ -165,6 +165,7 @@ export default () => {
     <View style={styles.container}>
       <Dropdown dropdown={dropdown}/>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={card.items}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
