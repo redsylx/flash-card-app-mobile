@@ -3,6 +3,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import LoadingOverlay from '../components/Loading';
 import Header from '../components/Header';
+import { View } from 'react-native';
 
 export default function TabLayout() {
   const theme = useCustomTheme();
@@ -10,8 +11,18 @@ export default function TabLayout() {
     <>
       <LoadingOverlay />
       <Header />
-      <Tabs screenOptions={{tabBarInactiveTintColor: theme.sub, tabBarActiveTintColor: theme.main, tabBarActiveBackgroundColor: theme.subAlt, tabBarInactiveBackgroundColor: theme.bg
-      }}>
+      <Tabs screenOptions={
+        {
+          tabBarInactiveTintColor: theme.sub,
+          tabBarActiveTintColor: theme.main,
+          tabBarActiveBackgroundColor: theme.sub,
+          tabBarInactiveBackgroundColor: theme.subAlt,
+          tabBarStyle: {
+            borderTopWidth: 0,
+            margin: 0,
+            padding: 0
+          },
+        }}>
         <Tabs.Screen
           name="store"
           options={{

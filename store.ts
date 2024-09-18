@@ -14,6 +14,18 @@ interface IDefaultState<T> {
   setItems: (data: T[]) => void,
 }
 
+interface IRefreshState<T> {
+  refresh: boolean,
+  setRefresh: (data: boolean) => void
+}
+
+interface ICartState<T> extends IDefaultState<T>, IRefreshState<T> {
+  addCart: (id: string) => void;
+  removeCart: (id: string) => void;
+  setAddCart: (callback: (id: string) => void) => void,
+  setRemoveCart: (callback: (id: string) => void) => void,
+}
+
 type AccountState = {
   account: IAccount;
   setAccount: (newAccount: IAccount) => void;
@@ -140,11 +152,17 @@ const createStoreCardStateSellCard = () => create<ICardState<ISellCard>>((set) =
 
 const useStoreDetailCard = createStoreCardStateSellCard();
 
-const useStoreCart = create<IDefaultState<ICart>>((set) => ({
+const useStoreCart = create<ICartState<ICart>>((set) => ({
   item: defaultCart,
   items: [],
+  refresh: false,
+  addCart: () => {},
+  removeCart: () => {},
   setItem: (item) => set({ item }),
   setItems: (items) => set({ items }),
+  setRefresh: (refresh) => set({ refresh }),
+  setAddCart: (addCart) => set({addCart}),
+  setRemoveCart: (removeCart) => set({removeCart}),
 }));
 
 const createSellCardCategory = () => create<IDefaultState<ISellCardCategory>>((set) => ({

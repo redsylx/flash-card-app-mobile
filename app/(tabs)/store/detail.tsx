@@ -3,23 +3,29 @@ import { useCustomTheme } from "@/hooks/useCustomTheme";
 import { IPaginationResult } from "@/interfaces/IPaginationResult";
 import { ISellCard } from "@/interfaces/ISellCard";
 import { serviceSellCardGetList } from "@/services/ServiceSellCard";
-import { useStoreCard, useStoreDetailCard } from "@/store";
+import { useStoreCard, useStoreCart, useStoreCartDetail, useStoreDetailCard } from "@/store";
+import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, StyleSheet, Text, View } from "react-native"
+import { FlatList, ImageBackground, Pressable, StyleSheet, Text, View } from "react-native"
 
 export default () => {
   const theme = useCustomTheme();
   const sellCardCategory = useStoreCard();
   const sellCard = useStoreDetailCard();
+  const cartDetail = useStoreCartDetail();
+  const cart = useStoreCart();
   const [category, setCategory] = useState(sellCardCategory.item);
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: 10,
       backgroundColor: theme.bg,
     },
     text: {
+      fontFamily: 'font-regular',
+      color: theme.text,
+    },
+    textPts: {
       fontFamily: 'font-regular',
       color: theme.text,
     },
@@ -34,7 +40,6 @@ export default () => {
       fontSize: 16,
     },
     cardContainer: {
-      borderRadius: 8,
       aspectRatio: 16 / 9,
       overflow: 'hidden',
     },
@@ -82,17 +87,22 @@ export default () => {
       zIndex: 15,
       backgroundColor: theme.main
     },
-    btnAddCart: {
+    containerBottom: {
       position: 'absolute',
-      right: 0,
       bottom: 0,
+      left: 0,
+      right: 0,
       zIndex: 15,
-      margin: 16,
-      backgroundColor: theme.main
     },
-    clueText: {
+    containerBottomView: {
+      flex: 2,
+      justifyContent: 'space-between',
+      flexDirection: "row",
+      height: 60,
+    },
+    point: {
       fontFamily: 'font-bold',
-      fontSize: 32,
+      fontSize: 24,
       color: theme.text,
     },
   })
@@ -115,23 +125,42 @@ export default () => {
             style={styles.imageBackground}
             imageStyle={styles.imageStyle}
           >
-            <View style={styles.overlayOpen} />
           </ImageBackground>
         </View>
 
       }
-      <Text style={styles.title}>{category.name}</Text>
-      <Text style={styles.text}>point: {category.point}</Text>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={sellCard.items}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View>
-            <Text style={styles.text}>{item.clueTxt}</Text>
+      <View style={{ paddingHorizontal: 20, flex: 1, paddingTop: 10 }}>
+        <Text style={styles.title}>{category.name}</Text>
+        <View style={styles.containerBottom}>
+          <View style={styles.containerBottomView}>
+            <View style={{ flex: 2, flexDirection: 'row', backgroundColor: theme.subAlt, paddingHorizontal: 20, alignItems: "center" }}>
+              <Text style={styles.point}>{category.point}</Text>
+              <Text style={styles.textPts}>pts</Text>
+            </View>
+            {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == category.id)
+              ?
+              <Pressable onPress={() => cart.removeCart(category.id)} style={{ backgroundColor: theme.error, paddingHorizontal: 20, alignItems: "center", justifyContent: "center" }}>
+                <FontAwesome size={28} name="trash" color={theme.bg} />
+              </Pressable>
+              :
+              <Pressable onPress={() => cart.addCart(category.id)}>
+                <Text>Add to Cart</Text>
+              </Pressable>
+            }
           </View>
-        )}
-      />
+        </View>
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={sellCard.items}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View>
+              <Text style={styles.text}>{item.clueTxt}</Text>
+            </View>
+          )}
+        />
+      </View>
     </View>
   )
 }

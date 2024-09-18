@@ -97,13 +97,16 @@ const Card: React.FC<ICardProps> = ({ card }) => {
 
   return (
     <TouchableOpacity onPress={onClick} style={styles.cardContainer}>
-      <ImageBackground
+      {
+        card.clueImgUrl != "" && 
+        <ImageBackground
         source={{ uri: card.clueImgUrl }}
         style={styles.imageBackground}
         imageStyle={styles.imageStyle}
       >
         <View style={open ? styles.overlayOpen : styles.overlayClosed} />
       </ImageBackground>
+      }
 
       <View style={styles.cardBorder} />
 

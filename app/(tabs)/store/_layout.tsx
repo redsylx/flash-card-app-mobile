@@ -17,21 +17,14 @@ export default () => {
     const items: IPaginationResult<ISellCardCategory> = await (await serviceSellCardCategoryGetListExclude(token, account.id)).json();
     sellCardCategory.setItems(items.items);
   }
+  
   useEffect(() => {
     getSellCardCategoryExclude();
   }, [])
 
-  const viewDetail = (id: string) => {
-  }
-
-  const addToCart = (id: string) => {
-    console.log(id);
-  }
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: 20,
       backgroundColor: theme.bg,
     },
     text: {

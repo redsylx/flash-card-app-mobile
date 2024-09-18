@@ -20,9 +20,9 @@ export default () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: theme.bg,
+      backgroundColor: theme.subAlt,
       paddingHorizontal: 20,
-      paddingTop: 20,
+      paddingTop: 24,
       color: theme.text
     },
     name: {
@@ -43,7 +43,7 @@ export default () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
       <Text style={styles.name}>{account.username ? account.username : '. . .'}</Text>
       <View style={{ flexDirection: 'row' }}>
         <Text style={styles.point}>{account.point} pts</Text>

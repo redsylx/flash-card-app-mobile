@@ -9,6 +9,7 @@ import { serviceCardCategoryGetList } from "@/services/ServiceCardCategory";
 import { serviceCardGetList } from "@/services/ServiceCard";
 import Dropdown from "../components/Dropdown";
 import Card from "../components/Card";
+import ICard, { defaultCard, emptyCard } from "@/interfaces/ICard";
 
 const CardItem = ({ title, imageUri, description }: { title: string; imageUri?: string; description: string }) => {
   const theme = useCustomTheme();
@@ -114,7 +115,8 @@ export default () => {
       setFirstRender2(false)
       if (!categoryId) return;
       const token = await getIdToken();
-      const cards = (await (await serviceCardGetList(token, categoryId, "SortOrder=desc")).json()).items;
+      const cards : ICard[] = (await (await serviceCardGetList(token, categoryId, "SortOrder=desc")).json()).items;
+      if(cards.length == 0) cards.push(emptyCard);
       card.setItems(cards);
     };
 
@@ -124,6 +126,7 @@ export default () => {
 
   const styles = StyleSheet.create({
     container: {
+      flex: 1,
       backgroundColor: theme.bg,
       paddingHorizontal: 20,
       paddingTop: 10,
