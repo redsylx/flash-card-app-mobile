@@ -64,6 +64,8 @@ export default () => {
   }
 
   useEffect(() => {
+    getCart();
+    
     cart.setAddCart(addCartDetail)
     cart.setRemoveCart(removeCartDetail)
     getSellCardCategoryExclude();
@@ -132,13 +134,6 @@ export default () => {
       zIndex: 15,
       backgroundColor: theme.main
     },
-    history: {
-      position: 'absolute',
-      left: 20,
-      bottom: 0,
-      zIndex: 15,
-      backgroundColor: theme.main
-    },
     btnAddCart: {
       position: 'absolute',
       right: 0,
@@ -170,9 +165,6 @@ export default () => {
     <View style={styles.container}>
       <Pressable onPress={() => router.push("/(tabs)/store/checkout")} style={styles.cart}>
         <Text style={styles.text}>Cart ({cart.item.nItems})</Text>
-      </Pressable>
-      <Pressable onPress={() => router.push("/(tabs)/store/history")} style={styles.history}>
-        <Text style={styles.text}>History</Text>
       </Pressable>
       <FlatList
         showsVerticalScrollIndicator={false}

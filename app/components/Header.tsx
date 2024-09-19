@@ -37,17 +37,11 @@ export default () => {
     },
   });
 
-  const logout = () => {
-    console.log("Logout")
-    auth.signOut().then(() => setAccount(defaultAccount));
-  }
-
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
       <Text style={styles.name}>{account.username ? account.username : '. . .'}</Text>
       <View style={{ flexDirection: 'row' }}>
         <Text style={styles.point}>{account.point} pts</Text>
-        <Text onPress={() => logout()}>Logout</Text>
       </View>
     </SafeAreaView >
   )
