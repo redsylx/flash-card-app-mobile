@@ -64,11 +64,16 @@ export default () => {
   }
 
   useEffect(() => {
-    getCart();
-    
-    cart.setAddCart(addCartDetail)
-    cart.setRemoveCart(removeCartDetail)
-    getSellCardCategoryExclude();
+    const fetch = async() => {
+      loading.setLoading(true)
+      await getCart();
+      cart.setAddCart(addCartDetail)
+      cart.setRemoveCart(removeCartDetail)
+      await getSellCardCategoryExclude();
+      loading.setLoading(false)
+    }
+
+    fetch();
   }, [])
 
   const viewDetail = (item: ISellCardCategory) => {
@@ -130,9 +135,14 @@ export default () => {
     cart: {
       position: 'absolute',
       right: 20,
-      bottom: 0,
+      bottom: 20,
       zIndex: 15,
-      backgroundColor: theme.main
+      width: 50,
+      height: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: theme.sub,
+      borderRadius: 100
     },
     btnAddCart: {
       position: 'absolute',
@@ -158,13 +168,35 @@ export default () => {
       fontSize: 24,
       color: theme.main,
     },
+    bubble: {
+      position: 'absolute',
+      left: 30,
+      bottom: 30,
+      backgroundColor: theme.error,
+      borderRadius: 10,
+      paddingHorizontal: 5,
+      paddingVertical: 2,
+      minWidth: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    bubbleText: {
+      color: theme.bg,
+      fontSize: 12,
+      fontWeight: 'bold',
+    },
   })
 
 
   return (
     <View style={styles.container}>
       <Pressable onPress={() => router.push("/(tabs)/store/checkout")} style={styles.cart}>
-        <Text style={styles.text}>Cart ({cart.item.nItems})</Text>
+        <FontAwesome size={28} name="shopping-cart" color={theme.main} />
+        {cart.item.nItems > 0 && (
+          <View style={styles.bubble}>
+            <Text style={styles.bubbleText}>{cart.item.nItems}</Text>
+          </View>
+        )}
       </Pressable>
       <FlatList
         showsVerticalScrollIndicator={false}

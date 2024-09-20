@@ -105,6 +105,20 @@ export default () => {
       fontSize: 24,
       color: theme.text,
     },
+    buttonRemoveCart: { 
+      width: 100,
+      backgroundColor: theme.error, 
+      paddingHorizontal: 20, 
+      alignItems: "center", 
+      justifyContent: "center" 
+    },
+    buttonAddCart: { 
+      width: 100,
+      backgroundColor: theme.main, 
+      paddingHorizontal: 20, 
+      alignItems: "center", 
+      justifyContent: "center" 
+    },
   })
 
   const fetchSellCard = async () => {
@@ -131,6 +145,7 @@ export default () => {
       }
       <View style={{ paddingHorizontal: 20, flex: 1, paddingTop: 10 }}>
         <Text style={styles.title}>{category.name}</Text>
+        
         <View style={styles.containerBottom}>
           <View style={styles.containerBottomView}>
             <View style={{ flex: 2, flexDirection: 'row', backgroundColor: theme.subAlt, paddingHorizontal: 20, alignItems: "center" }}>
@@ -139,12 +154,12 @@ export default () => {
             </View>
             {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == category.id)
               ?
-              <Pressable onPress={() => cart.removeCart(category.id)} style={{ backgroundColor: theme.error, paddingHorizontal: 20, alignItems: "center", justifyContent: "center" }}>
+              <Pressable onPress={() => cart.removeCart(category.id)} style={styles.buttonRemoveCart}>
                 <FontAwesome size={28} name="trash" color={theme.bg} />
               </Pressable>
               :
-              <Pressable onPress={() => cart.addCart(category.id)}>
-                <Text>Add to Cart</Text>
+              <Pressable onPress={() => cart.addCart(category.id)} style={styles.buttonAddCart}>
+                <FontAwesome size={28} name="plus-circle" color={theme.bg} />
               </Pressable>
             }
           </View>
