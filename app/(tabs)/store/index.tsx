@@ -28,6 +28,7 @@ export default () => {
   }
 
   const getCartDetails = async () => {
+
     const token = await getIdToken();
     const items: ISellCardCategory[] = await (await serviceCartDetailGet(token, cart.item.id)).json();
     cartDetail.setItems(items);
@@ -130,7 +131,6 @@ export default () => {
       bottom: 0,
       zIndex: 10,
       padding: 16,
-      justifyContent: 'space-between',
     },
     cart: {
       position: 'absolute',
@@ -147,7 +147,7 @@ export default () => {
     btnAddCart: {
       position: 'absolute',
       right: 0,
-      bottom: 0,
+      top: 12,
       zIndex: 15,
       margin: 16,
     },
@@ -158,10 +158,9 @@ export default () => {
     },
     pointContainer: {
       position: 'absolute',
-      left: 0,
-      bottom: 0,
+      left: 16,
+      bottom: 16,
       zIndex: 15,
-      margin: 16,
     },
     pointText: {
       fontFamily: 'font-regular',
@@ -185,6 +184,35 @@ export default () => {
       fontSize: 12,
       fontWeight: 'bold',
     },
+    accountName: {
+      fontFamily: 'font-regular',
+      fontSize: 16,
+      color: theme.error,
+    },
+
+    row: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',
+    },
+    columnLeft: {
+      alignItems: 'flex-start',
+    },
+    columnMid: {
+      alignItems: 'center',
+    },
+    columnRight: {
+      alignItems: 'flex-end',
+    },
+    label: {
+      color: theme.text,
+      fontSize: 14,
+    },
+    value: {
+      color: theme.text,
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
   })
 
 
@@ -198,12 +226,23 @@ export default () => {
           </View>
         )}
       </Pressable>
+      
       <FlatList
         showsVerticalScrollIndicator={false}
         data={sellCardCategory.items}
         keyExtractor={(item) => item.id + Math.random()}
         renderItem={({ item }) => (
           <View style={{ marginBottom: 20 }}>
+            {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == item.id)
+                ?
+                <Pressable onPress={() => cart.removeCart(item.id)} style={styles.btnAddCart}>
+                  <FontAwesome size={28} name="trash" color={theme.error} />
+                </Pressable>
+                :
+                <Pressable onPress={() => cart.addCart(item.id)} style={styles.btnAddCart}>
+                  <FontAwesome size={28} name="plus-circle" color={theme.main} />
+                </Pressable>
+              }
             <Pressable style={styles.cardContainer} onPress={() => viewDetail(item)}>
               {
                 item.imgUrl != "" &&
@@ -222,23 +261,25 @@ export default () => {
                 <Text style={styles.clueText}>
                   {item.name}
                 </Text>
-                <View style={styles.pointContainer}>
-                  <Text style={styles.pointText}>
-                    {item.point} pts
+                <Text style={styles.accountName}>
+                    {item.account.username}
                   </Text>
+                <View style={styles.pointContainer}>
+                  <View style={styles.row}>
+                    <View style={styles.columnLeft}>
+                      <Text style={styles.label}>card</Text>
+                      <Text style={styles.value}>{item.nCard}</Text>
+                    </View>
+                    <View style={styles.columnMid}>
+                      <Text style={styles.label}>sold</Text>
+                      <Text style={styles.value}>{item.sold}x</Text>
+                    </View>
+                    <View style={styles.columnRight}>
+                      <Text style={styles.label}>point</Text>
+                      <Text style={styles.value}>{item.point}</Text>
+                    </View>
+                  </View>
                 </View>
-                <Text style={styles.clueText}>
-                </Text>
-                {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == item.id)
-                ?
-                <Pressable onPress={() => cart.removeCart(item.id)} style={styles.btnAddCart}>
-                  <FontAwesome size={28} name="trash" color={theme.error} />
-                </Pressable>
-                :
-                <Pressable onPress={() => cart.addCart(item.id)} style={styles.btnAddCart}>
-                  <FontAwesome size={28} name="plus-circle" color={theme.main} />
-                </Pressable>
-              }
               </View>
 
               

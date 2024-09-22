@@ -1,3 +1,5 @@
+import IAccount, { defaultAccount } from "./IAccount"
+
 interface ISellCardCategory {
   id: string,
   name: string,
@@ -7,7 +9,8 @@ interface ISellCardCategory {
   point: number,
   sold: number,
   description: string,
-  createdTime: Date
+  createdTime: Date,
+  account: IAccount
 }
 
 const defaultSellCardCategory : ISellCardCategory = {
@@ -19,7 +22,8 @@ const defaultSellCardCategory : ISellCardCategory = {
   point: 0,
   sold: 0,
   description: "",
-  createdTime: new Date()
+  createdTime: new Date(),
+  account: defaultAccount
 }
 
 export {

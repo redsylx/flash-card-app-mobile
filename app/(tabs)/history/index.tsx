@@ -60,13 +60,13 @@ export default () => {
 
   const getTransactions = async () => {
     const token = await getIdToken();
-    const result : IPaginationResult<ITransactionActivity> = await (await serviceTransactionGetList(token, account.id)).json();
+    const result: IPaginationResult<ITransactionActivity> = await (await serviceTransactionGetList(token, account.id)).json();
     transaction.setItems(result.items);
   }
 
   const viewDetail = (item: ITransactionActivity) => {
     transaction.setItem(item);
-    router.push('/(tabs)/store/history/detail');
+    router.push('/(tabs)/history/detail');
   }
 
   useEffect(() => {
@@ -85,9 +85,9 @@ export default () => {
               <View style={styles.textContainer}>
                 <Text style={styles.title}>{item.id}</Text>
                 <Text style={styles.time}>{item.createdTime.toString()}</Text>
-                <View style={{ flex: 2, flexDirection: "row", justifyContent: 'space-between',}}>
-                <Text style={styles.text}>{item.totalItem} items</Text>
-                <Text style={styles.points}>{item.totalPoint} pts</Text>
+                <View style={{ flex: 2, flexDirection: "row", justifyContent: 'space-between', }}>
+                  <Text style={styles.text}>{item.totalItem} items</Text>
+                  <Text style={styles.points}>{item.totalPoint} pts</Text>
                 </View>
               </View>
               <Pressable style={styles.deleteButton} onPress={() => viewDetail(item)}>
