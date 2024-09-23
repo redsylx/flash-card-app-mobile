@@ -6,10 +6,10 @@ import { IPaginationResult } from "@/interfaces/IPaginationResult";
 import { ISellCardCategory } from "@/interfaces/ISellCardCategory";
 import { serviceCardCategoryConvert } from "@/services/ServiceCardCategory";
 import { serviceSellCardCategoryGetBuyerList } from "@/services/ServiceSellCardCategory";
-import { useAccount, useAlert, useHomeDropdown, useLoading, useStoreHistoryDetail, useStoreTransaction } from "@/store";
+import { useAccount, useAlert, useHistoryPopup, useHomeDropdown, useLoading, useStoreHistoryDetail, useStorePopup, useStoreTransaction } from "@/store";
 import { FontAwesome } from "@expo/vector-icons";
-import { useEffect } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, View } from "react-native"
+import { useEffect, useState } from "react";
+import { FlatList, ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 
 export default () => {
   const theme = useCustomTheme();
@@ -18,7 +18,10 @@ export default () => {
   const transaction = useStoreTransaction();
   const loading = useLoading();
   const alert = useAlert();
+  const popup = useHistoryPopup();
   const { account } = useAccount();
+  const [selectedId, setSelectedId ] = useState("");
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   const styles = StyleSheet.create({
     container: {
@@ -113,6 +116,27 @@ export default () => {
       fontSize: 24,
       color: theme.main,
     },
+    searchInput: {
+      backgroundColor: theme.bg,
+      padding: 10,
+      borderRadius: 8,
+      marginBottom: 10,
+      color: theme.text,
+      fontFamily: 'font-regular',
+      fontSize: 16
+    },
+    normalButton: {
+      backgroundColor: theme.sub,
+      borderWidth: 2,
+      borderColor: theme.sub,
+      padding: 4,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    textNormalButton: {
+      fontFamily: 'font-regular',
+      color: theme.text,
+    },
   })
 
   const getSellCardCategories = async () => {
@@ -121,17 +145,18 @@ export default () => {
     sellCardCategory.setItems(result.items);
   }
 
-  const convert = async (sellCardCateogryId: string) => {
+  const convert = async (sellCardCateogryId: string, newCategoryName: string) => {
     try {
       loading.setLoading(true)
       const token = await getIdToken();
-      await serviceCardCategoryConvert(token, account.id, sellCardCateogryId);
+      await serviceCardCategoryConvert(token, account.id, sellCardCateogryId, newCategoryName);
       category.setRefresh(!category.refresh);
     } catch (error) {
       errorHandler(error, alert)
     }
     finally {
       loading.setLoading(false)
+      popup.setIsOpen(false)
     }
   }
 
@@ -185,7 +210,7 @@ export default () => {
                   <Text style={styles.clueText}>
                   </Text>
 
-                  <Pressable onPress={() => convert(item.id)} style={styles.btnAddCart}>
+                  <Pressable onPress={() => { setSelectedId(item.id); popup.setIsOpen(true); }} style={styles.btnAddCart}>
                     <FontAwesome size={28} name="arrow-right" color={theme.error} />
                   </Pressable>
                 </View>
@@ -194,6 +219,18 @@ export default () => {
           )}
         />
       </View>
+      <Popup popup={popup}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="new category name (3-12 char)"
+          placeholderTextColor={theme.sub}
+          onChangeText={(text) => setNewCategoryName(text)}
+          value={newCategoryName}
+        />
+        <Pressable style={styles.normalButton} onPress={() => convert(selectedId, newCategoryName)}>
+          <Text style={styles.textNormalButton}>Convert</Text>
+        </Pressable>
+      </Popup>
     </View>
   )
 }

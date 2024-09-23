@@ -193,6 +193,7 @@ const createPopup = () => create<IPopupState>((set) => ({
 
 const useGlobalPopup = createPopup();
 const useStorePopup = createPopup();
+const useHistoryPopup = createPopup();
 
 interface IAlertState extends IPopupState {
   title: string,
@@ -229,5 +230,6 @@ export {
   useStoreHistoryDetail,
   useGlobalPopup,
   useStorePopup,
+  useHistoryPopup,
   useAlert
 }

@@ -26,8 +26,8 @@ async function serviceCardCategoryDelete (accessToken: string, accountId: string
     return await fetch(url, init);
 }
 
-async function serviceCardCategoryConvert (accessToken: string, accountId: string, sellCardCategoryId: string) {
-    const url = `${base_url}/convert?accountId=${encodeURIComponent(accountId)}&sellCardCategoryId=${encodeURIComponent(sellCardCategoryId)}`;
+async function serviceCardCategoryConvert (accessToken: string, accountId: string, sellCardCategoryId: string, newCategoryName: string) {
+    const url = `${base_url}/convert?accountId=${encodeURIComponent(accountId)}&sellCardCategoryId=${encodeURIComponent(sellCardCategoryId)}&newCategoryName=${encodeURIComponent(newCategoryName)}`;
     const init = requestInit(accessToken);
     return await customFetch(url, init);
 }

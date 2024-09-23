@@ -64,7 +64,6 @@ const Card: React.FC<ICardProps> = ({ card }) => {
       bottom: 0,
       zIndex: 10,
       padding: 16,
-      justifyContent: 'space-between',
     },
     descriptionText: {
       fontFamily: 'font-regular',
@@ -80,10 +79,9 @@ const Card: React.FC<ICardProps> = ({ card }) => {
       color: theme.text,
     },
     infoContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      marginTop: 'auto',
+      position: 'absolute',
+      left: 20,
+      bottom: 20,
     },
     frequencyText: {
       fontSize: 16,
@@ -92,6 +90,11 @@ const Card: React.FC<ICardProps> = ({ card }) => {
     correctText: {
       fontSize: 16,
       color: theme.main, // Warna teks persentase benar
+    },
+    row: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',
     },
   });
 
@@ -116,15 +119,17 @@ const Card: React.FC<ICardProps> = ({ card }) => {
             {card.descriptionTxt}
           </Text>
         ) : (
-          <View>
+          <>
             <Text style={styles.clueText}>{card.clueTxt}</Text>
             <View style={styles.infoContainer}>
+              <View style={styles.row}>
               <Text style={styles.frequencyText}>{card.nFrequency}x</Text>
               <Text style={styles.correctText}>
                 {Math.round((card.pctCorrect ?? 0) * 100)}%
               </Text>
+              </View>
             </View>
-          </View>
+          </>
         )}
       </View>
     </TouchableOpacity>

@@ -24,6 +24,7 @@ export default () => {
 
   const styles = StyleSheet.create({
     container: {
+      paddingTop: 20,
       flex: 1,
       backgroundColor: theme.bg,
     },
@@ -49,11 +50,7 @@ export default () => {
       color: theme.text,
     },
     containerBottom: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      zIndex: 15,
+      height: 60
     },
     containerBottomView: {
       flex: 2,
