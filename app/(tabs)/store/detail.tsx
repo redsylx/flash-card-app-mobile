@@ -6,7 +6,7 @@ import { serviceSellCardGetList } from "@/services/ServiceSellCard";
 import { useStoreCard, useStoreCart, useStoreCartDetail, useStoreDetailCard } from "@/store";
 import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { FlatList, ImageBackground, Pressable, StyleSheet, Text, View } from "react-native"
+import { FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 
 export default () => {
   const theme = useCustomTheme();
@@ -20,6 +20,12 @@ export default () => {
     container: {
       flex: 1,
       backgroundColor: theme.bg,
+    },
+    scrollView: {
+      flexGrow: 1,
+    },
+    fixView: {
+      height: 60
     },
     text: {
       fontFamily: 'font-regular',
@@ -105,19 +111,99 @@ export default () => {
       fontSize: 24,
       color: theme.text,
     },
-    buttonRemoveCart: { 
+    buttonRemoveCart: {
       width: 100,
-      backgroundColor: theme.error, 
-      paddingHorizontal: 20, 
-      alignItems: "center", 
-      justifyContent: "center" 
+      backgroundColor: theme.error,
+      paddingHorizontal: 20,
+      alignItems: "center",
+      justifyContent: "center"
     },
-    buttonAddCart: { 
+    buttonAddCart: {
       width: 100,
-      backgroundColor: theme.main, 
-      paddingHorizontal: 20, 
-      alignItems: "center", 
-      justifyContent: "center" 
+      backgroundColor: theme.main,
+      paddingHorizontal: 20,
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    subtitle: {
+      fontFamily: 'font-regular',
+      color: theme.error,
+    },
+    description: {
+      fontFamily: 'font-regular',
+      textAlign: 'left',
+      color: theme.text,
+      marginTop: 20,
+      marginBottom: 20,
+    },
+    statsContainer: {
+      flexDirection: 'row',
+      backgroundColor: theme.subAlt,
+      borderRadius: 8,
+      justifyContent: 'space-around',
+      paddingVertical: 10,
+      marginBottom: 20,
+    },
+    stat: {
+      alignItems: 'center',
+    },
+    statLabel: {
+      fontFamily: 'font-regular',
+      color: theme.text,
+      fontSize: 12,
+    },
+    statValue: {
+      fontFamily: 'font-bold',
+      fontSize: 16,
+      color: theme.text,
+    },
+    previewLabel: {
+      fontFamily: 'font-regular',
+      color: theme.text,
+      fontSize: 16,
+      marginBottom: 10,
+    },
+    previewContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      borderRadius: 8,
+      marginBottom: 20,
+      width: '100%'
+    },
+    cardImageContainer: {
+      width: 100,
+      height: 100,
+      borderRadius: 8,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 10,
+    },
+    cardImage: {
+      width: 100,
+      height: 100,
+      borderRadius: 8,
+      marginRight: 10,
+    },
+    cardImageEmpty: {
+      width: 100,
+      height: 100,
+      borderRadius: 8,
+      marginRight: 10,
+      borderWidth: 2,
+      borderColor: theme.subAlt,
+      backgroundColor: theme.bg
+    },
+    cardTitle: {
+      fontFamily: 'font-bold',
+      color: theme.text,
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
+    cardDescription: {
+      fontFamily: 'font-regular',
+      color: theme.text,
+      fontSize: 12,
     },
   })
 
@@ -131,50 +217,75 @@ export default () => {
   }, [])
   return (
     <View style={styles.container}>
-      {
-        category.imgUrl != "" &&
-        <View style={styles.cardContainer}>
-          <ImageBackground
-            source={{ uri: category.imgUrl }}
-            style={styles.imageBackground}
-            imageStyle={styles.imageStyle}
-          >
-          </ImageBackground>
-        </View>
+      <ScrollView style={styles.scrollView}>
+        {
+          category.imgUrl != "" &&
+          <View style={styles.cardContainer}>
+            <ImageBackground
+              source={{ uri: category.imgUrl }}
+              style={styles.imageBackground}
+              imageStyle={styles.imageStyle}
+            >
+            </ImageBackground>
+          </View>
 
-      }
-      <View style={{ paddingHorizontal: 20, flex: 1, paddingTop: 10 }}>
-        <Text style={styles.title}>{category.name}</Text>
-        
-        <View style={styles.containerBottom}>
-          <View style={styles.containerBottomView}>
-            <View style={{ flex: 2, flexDirection: 'row', backgroundColor: theme.subAlt, paddingHorizontal: 20, alignItems: "center" }}>
-              <Text style={styles.point}>{category.point}</Text>
-              <Text style={styles.textPts}>pts</Text>
+        }
+
+
+        <View style={{ paddingHorizontal: 20, flex: 1, paddingTop: 10 }}>
+          <Text style={styles.title}>{category.name}</Text>
+          <Text style={styles.subtitle}>{category.account.username}</Text>
+          <Text style={styles.description}>{category.description}</Text>
+
+          <View style={styles.statsContainer}>
+            <View style={styles.stat}>
+              <Text style={styles.statLabel}>card</Text>
+              <Text style={styles.statValue}>{category.nCard}</Text>
             </View>
-            {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == category.id)
-              ?
-              <Pressable onPress={() => cart.removeCart(category.id)} style={styles.buttonRemoveCart}>
-                <FontAwesome size={28} name="trash" color={theme.bg} />
-              </Pressable>
-              :
-              <Pressable onPress={() => cart.addCart(category.id)} style={styles.buttonAddCart}>
-                <FontAwesome size={28} name="plus-circle" color={theme.bg} />
-              </Pressable>
-            }
+            <View style={styles.stat}>
+              <Text style={styles.statLabel}>sold</Text>
+              <Text style={styles.statValue}>{category.sold}x</Text>
+            </View>
+          </View>
+
+          <Text style={styles.previewLabel}>Preview</Text>
+          <View>
+            {sellCard.items.map((item, index) => (
+              <View style={styles.previewContainer} key={index}>
+                {
+                  item.clueImg != ""
+                    ? <View>
+                      <Image source={{ uri: item.clueImgUrl }} style={styles.cardImage} />
+                    </View>
+                    : <View style={styles.cardImageEmpty} />
+                }
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.cardTitle}>{item.clueTxt}</Text>
+                  <Text style={styles.cardDescription}>{item.descriptionTxt}</Text>
+                </View>
+              </View>
+            ))}
           </View>
         </View>
 
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={sellCard.items}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View>
-              <Text style={styles.text}>{item.clueTxt}</Text>
-            </View>
-          )}
-        />
+      </ScrollView>
+      <View style={styles.fixView}>
+        <View style={styles.containerBottomView}>
+          <View style={{ flex: 2, flexDirection: 'row', backgroundColor: theme.subAlt, paddingHorizontal: 20, alignItems: "center" }}>
+            <Text style={styles.point}>{category.point}</Text>
+            <Text style={styles.textPts}>pts</Text>
+          </View>
+          {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == category.id)
+            ?
+            <Pressable onPress={() => cart.removeCart(category.id)} style={styles.buttonRemoveCart}>
+              <FontAwesome size={28} name="trash" color={theme.bg} />
+            </Pressable>
+            :
+            <Pressable onPress={() => cart.addCart(category.id)} style={styles.buttonAddCart}>
+              <FontAwesome size={28} name="plus-circle" color={theme.bg} />
+            </Pressable>
+          }
+        </View>
       </View>
     </View>
   )

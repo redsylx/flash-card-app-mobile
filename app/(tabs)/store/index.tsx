@@ -141,7 +141,7 @@ export default () => {
       height: 50,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: theme.sub,
+      backgroundColor: theme.subAlt,
       borderRadius: 100
     },
     btnAddCart: {
@@ -219,7 +219,7 @@ export default () => {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => router.push("/(tabs)/store/checkout")} style={styles.cart}>
-        <FontAwesome size={28} name="shopping-cart" color={theme.main} />
+        <FontAwesome size={28} name="shopping-cart" color={theme.sub} />
         {cart.item.nItems > 0 && (
           <View style={styles.bubble}>
             <Text style={styles.bubbleText}>{cart.item.nItems}</Text>

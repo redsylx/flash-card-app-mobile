@@ -10,18 +10,6 @@ import { StyleSheet, View } from "react-native";
 
 export default () => {
   const theme = useCustomTheme();
-  const { account } = useAccount();
-  const sellCardCategory = useStoreCard();
-  const getSellCardCategoryExclude = async () => {
-    const token = await getIdToken();
-    const items: IPaginationResult<ISellCardCategory> = await (await serviceSellCardCategoryGetListExclude(token, account.id)).json();
-    sellCardCategory.setItems(items.items);
-  }
-  
-  useEffect(() => {
-    getSellCardCategoryExclude();
-  }, [])
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
