@@ -20,10 +20,10 @@ interface IRefreshState<T> {
 }
 
 interface ICartState<T> extends IDefaultState<T>, IRefreshState<T> {
-  addCart: (id: string) => void;
-  removeCart: (id: string) => void;
-  setAddCart: (callback: (id: string) => void) => void,
-  setRemoveCart: (callback: (id: string) => void) => void,
+  addCart: (id: string, cartId: string) => void;
+  removeCart: (id: string, cartId: string) => void;
+  setAddCart: (callback: (id: string, cartId: string) => void) => void,
+  setRemoveCart: (callback: (id: string, cartId: string) => void) => void,
 }
 
 type AccountState = {

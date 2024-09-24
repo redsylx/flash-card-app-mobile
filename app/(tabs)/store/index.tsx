@@ -27,18 +27,18 @@ export default () => {
     sellCardCategory.setItems(items.items);
   }
 
-  const getCartDetails = async () => {
+  const getCartDetails = async (cartId: string) => {
 
     const token = await getIdToken();
-    const items: ISellCardCategory[] = await (await serviceCartDetailGet(token, cart.item.id)).json();
+    const items: ISellCardCategory[] = await (await serviceCartDetailGet(token, cartId)).json();
     cartDetail.setItems(items);
   }
 
-  const addCartDetail = async (sellCategoryId: string) => {
+  const addCartDetail = async (sellCategoryId: string, cartId: string) => {
     try {
       loading.setLoading(true);
       const token = await getIdToken();
-      await serviceCartDetailAdd(token, cart.item.id, sellCategoryId);
+      await serviceCartDetailAdd(token, cartId, sellCategoryId);
       await getCart();
     } finally {
       loading.setLoading(false);
@@ -46,11 +46,11 @@ export default () => {
     
   }
 
-  const removeCartDetail = async (sellCategoryId: string) => {
+  const removeCartDetail = async (sellCategoryId: string, cartId: string) => {
     try {
       loading.setLoading(true);
       const token = await getIdToken();
-      await serviceCartDetailRemove(token, cart.item.id, sellCategoryId);
+      await serviceCartDetailRemove(token, cartId, sellCategoryId);
       await getCart();
     } finally {
       loading.setLoading(false);
@@ -61,7 +61,7 @@ export default () => {
     const token = await getIdToken();
     const item: ICart = await (await serviceCartGet(token, account.id)).json();
     cart.setItem(item);
-    await getCartDetails()
+    await getCartDetails(item.id)
   }
 
   useEffect(() => {
@@ -235,11 +235,11 @@ export default () => {
           <View style={{ marginBottom: 20 }}>
             {cartDetail.items.length > 0 && cartDetail.items.find(p => p.id == item.id)
                 ?
-                <Pressable onPress={() => cart.removeCart(item.id)} style={styles.btnAddCart}>
+                <Pressable onPress={() => cart.removeCart(item.id, cart.item.id)} style={styles.btnAddCart}>
                   <FontAwesome size={28} name="trash" color={theme.error} />
                 </Pressable>
                 :
-                <Pressable onPress={() => cart.addCart(item.id)} style={styles.btnAddCart}>
+                <Pressable onPress={() => cart.addCart(item.id, cart.item.id)} style={styles.btnAddCart}>
                   <FontAwesome size={28} name="plus-circle" color={theme.main} />
                 </Pressable>
               }
